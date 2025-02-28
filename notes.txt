@@ -1,0 +1,42 @@
+What can it do?
+- Render any static model with material with transform
+- Texture animations (keyframes)
+- Vertex animations (keyframes)
+- Render dynamic models with vertex control with transform
+
+Functionality
+- Set up buffers and uniforms
+	- Preallocate large VBO and EBO
+	- Fill them every frame with user data 
+	- Transform needs to be applied to set of vertices
+		- Simple : set transform uniform between draw calls
+		- Advanced : Instance data, or TransformIndex as a vertex attribute
+- Take data from user
+	- Every frame, submit model along with material and transform
+	- Allow user to handle texture and vertex animations and dynamic models themselves 	  by submitting a different texture with the material every time.
+	- Submit models and create buffers out of them on the fly
+	- Maybe special option to presave static geometry
+- Textures : How to send to shaders?
+	- 
+- Render
+
+Full pipeline 
+- Initialize
+	- Vertex attributes : Position, UV
+	- Instance vertex attributes : Texture index, Transform, Color (separate 				       	       VBO for these)
+	- Preallocate huge VBO, instance VBO, EBO, draw indirect buffer, updated per frame
+	- Texture array (uniform)
+- Create textures
+	- Create texture in the array
+	- Return the texture array index to the user
+- Submit models
+	- Vertex and index data (add to buffers)
+	- Texture index
+	- Transform
+	- Color (optional, default white)
+	- Set baseInstance properly
+	- Store draw call as indirect (for now, instanceCount=1 i.e. no instancing)
+- Draw
+	- Draw via indirect buffer
+	- Clear VBO, EBO, transform array, draw buffer
+

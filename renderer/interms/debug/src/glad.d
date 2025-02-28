@@ -1,4 +1,4 @@
-interms\debug/src/glad.o: src/glad.cpp \
+interms\\debug/src/glad.o: src/glad.cpp \
  A:/mingw64/x86_64-w64-mingw32/include/stdio.h \
  A:/mingw64/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
  A:/mingw64/x86_64-w64-mingw32/include/corecrt.h \

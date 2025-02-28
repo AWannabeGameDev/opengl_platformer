@@ -1,56 +1,78 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
 
-#include <string_view>
-#include <stdio.h>
-#include <vector>
+#include <stdexcept>
+
+#include "renderer/base.hpp"
 
 class Renderer
 {
-public :
-    struct Vertex
+private :
+    struct _DrawCmd
     {
+        GLuint indexCount;
+        GLuint instanceCount;
+        GLuint indexOffset;
+        GLint vertexOffset;
+        GLuint instanceOffset;
+    };
+
+public :
+    using Index = unsigned int;
+
+    struct Vertex
+    {   
         glm::vec3 position;
     };
 
-private :
-    static constexpr unsigned int _BINDING_POINT_VERTICES = 0;
+    struct ModelData
+    {
+        glm::mat4 transform;
+        glm::vec4 color;
+    };
 
-    static constexpr unsigned int _ATTRIB_INDEX_POSITION = 0;
+private :
+    static constexpr size_t _MAX_VERTICES {1024};
+    static constexpr size_t _MAX_INDICES {4096};
+    static constexpr size_t _MAX_INSTANCES {1024};
+    static constexpr size_t _MAX_DRAW_CALLS {1024};
+
+    static constexpr GLuint _BINDING_POINT_VERTICES {0};
+    static constexpr GLuint _BINDING_POINT_INSTANCE {1};
+
+    static constexpr GLuint _ATTRIB_IDX_POSITION {0};
+    static constexpr GLuint _ATTRIB_IDX_TRANSFORM {1};
+    static constexpr GLuint _ATTRIB_IDX_COLOR {5};
 
     GLFWwindow* _window;
     int _width;
     int _height;
 
-    bool sceneOpen {false};
+    GLuint _vertexBuffer;
+    GLuint _instanceVertexBuffer;
+    GLuint _indexBuffer;
+    GLuint _drawCmdBuffer;
+    GLuint _vertexArray;
 
-    unsigned int _vbo;
-    size_t _vboSize {0};
-    unsigned int _ebo;
-    size_t _eboSize {0};
-    unsigned int _vao;
+    GLuint _totalVertexCount {0};
+    GLuint _totalInstanceCount {0};
+    GLuint _totalIndexCount {0};
+    GLuint _totalDrawCmdCount {0};
 
-    std::vector<Vertex> _vertices {};
-    std::vector<unsigned int> _indices {};
-
-    void _createWindow(std::string_view title);
-    void _setupVertexArray();
+    GLuint _defaultShader {createShaderProgram({"../../renderer/src/shaders/default.vxs",
+                                               "../../renderer/src/shaders/default.fms"})};
 
 public :
-
-    Renderer(int windowWidth, int windowHeight, std::string_view title);
+    Renderer(int width, int height, std::string_view title);
     ~Renderer();
 
     bool userExitedWindow();
+    
+    void submitModel(const Vertex* vertices, size_t vertexCount, const Index* indices, size_t indexCount, 
+                     const ModelData& modelData);
 
-    size_t newPrefab(const Vertex* vertices, size_t vertexCount, const unsigned int* indices, size_t indexCount);
-
-    void beginScene();
-    void endScene();
     void drawAll();
 };
 

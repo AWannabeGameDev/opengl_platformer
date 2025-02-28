@@ -1,63 +1,59 @@
-#include <stdexcept>
-
 #include "renderer/renderer.hpp"
 
-void Renderer::_createWindow(std::string_view title)
+Renderer::Renderer(int width, int height, std::string_view title) :
+    _window {createWindow(width, height, title)}, _width {width}, _height {height}
 {
-    if(glfwInit() != GLFW_TRUE)
+    glEnable(GL_DEBUG_OUTPUT);
+    glViewport(0, 0, width, height);
+
+    glGenVertexArrays(1, &_vertexArray);
+    glBindVertexArray(_vertexArray);
+
+    glGenBuffers(1, &_indexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, _MAX_INDICES * sizeof(Index), nullptr, GL_STREAM_DRAW);
+
+    glGenBuffers(1, &_vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, _MAX_VERTICES * sizeof(Vertex), nullptr, GL_STREAM_DRAW);
+
+    glGenBuffers(1, &_instanceVertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, _instanceVertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, _MAX_INSTANCES * sizeof(ModelData), nullptr, GL_STREAM_DRAW);
+
+    glBindVertexBuffer(_BINDING_POINT_VERTICES, _vertexBuffer, 0, sizeof(Vertex));
+    glBindVertexBuffer(_BINDING_POINT_INSTANCE, _instanceVertexBuffer, 0, sizeof(ModelData));
+    glVertexBindingDivisor(_BINDING_POINT_INSTANCE, 1);
+
+    glVertexAttribFormat(_ATTRIB_IDX_POSITION, 3, GL_FLOAT, GL_FALSE, offsetof(Vertex, position));
+    glVertexAttribBinding(_ATTRIB_IDX_POSITION, _BINDING_POINT_VERTICES);
+    glEnableVertexAttribArray(_ATTRIB_IDX_POSITION);
+
+    glVertexAttribFormat(_ATTRIB_IDX_COLOR, 4, GL_FLOAT, GL_FALSE, offsetof(ModelData, color));
+    glVertexAttribBinding(_ATTRIB_IDX_COLOR, _BINDING_POINT_INSTANCE);
+    glEnableVertexAttribArray(_ATTRIB_IDX_COLOR);
+
+    for(GLuint i {0}; i < 4; i++)
     {
-        throw std::runtime_error {"Failed to initialize GLFW."};
+        glVertexAttribFormat(_ATTRIB_IDX_TRANSFORM + i, 4, GL_FLOAT, GL_FALSE, 
+                                offsetof(ModelData, transform) + (i * sizeof(glm::vec4)));
+        glVertexAttribBinding(_ATTRIB_IDX_TRANSFORM + i, _BINDING_POINT_INSTANCE);
+        glEnableVertexAttribArray(_ATTRIB_IDX_TRANSFORM + i);
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
-
-    _window = glfwCreateWindow(_width, _height, title.data(), nullptr, nullptr);
-
-    if(not _window)
-    {
-        glfwTerminate();
-        throw std::runtime_error {"Failed to create window."};
-    }
-
-    glfwMakeContextCurrent(_window);
-
-    if(not gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        glfwTerminate();
-        throw std::runtime_error {"Failed to initialize GLAD."};
-    }
-
-    printf("Using OpenGL version : %s\n", glGetString(GL_VERSION));
-}
-
-void Renderer::_setupVertexArray()
-{
-    glGenVertexArrays(1, &_vao);
-    glBindVertexArray(_vao);
-
-    glGenBuffers(1, &_vbo);
-    glBindVertexBuffer(_BINDING_POINT_VERTICES, _vbo, 0, sizeof(Vertex));
-
-    glVertexAttribFormat(_ATTRIB_INDEX_POSITION, 3, GL_FLOAT, GL_FALSE, offsetof(Vertex, position));
-    glVertexAttribBinding(_ATTRIB_INDEX_POSITION, _BINDING_POINT_VERTICES);
-    glEnableVertexAttribArray(_ATTRIB_INDEX_POSITION);
-
-    glGenBuffers(1, &_ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
-}
-
-Renderer::Renderer(int windowWidth, int windowHeight, std::string_view title) :
-    _width {windowWidth}, _height {windowHeight}
-{
-    _createWindow(title);
-    _setupVertexArray();
+    glGenBuffers(1, &_drawCmdBuffer);
+    glBindBuffer(GL_DRAW_INDIRECT_BUFFER, _drawCmdBuffer);
+    glBufferData(GL_DRAW_INDIRECT_BUFFER, _MAX_DRAW_CALLS * sizeof(_DrawCmd), nullptr, GL_STREAM_DRAW);
 }
 
 Renderer::~Renderer()
 {
+    glDeleteBuffers(1, &_vertexBuffer);
+    glDeleteBuffers(1, &_indexBuffer);
+    glDeleteBuffers(1, &_instanceVertexBuffer);
+    glDeleteBuffers(1, &_drawCmdBuffer);
+    glDeleteVertexArrays(1, &_vertexArray);
+
     glfwTerminate();
 }
 
@@ -66,40 +62,60 @@ bool Renderer::userExitedWindow()
     return glfwWindowShouldClose(_window);
 }
 
-size_t Renderer::newPrefab(const Vertex* vertices, size_t vertexCount, const unsigned int* indices, size_t indexCount)
+void Renderer::submitModel(const Vertex* vertices, size_t vertexCount, const Index* indices, size_t indexCount, 
+                           const ModelData& modelData)
 {
-    if(sceneOpen)
+    _DrawCmd newDrawCall
     {
-        throw std::logic_error {"Can't create prefab while scene is open."};    
-    }
+        .indexCount {(GLuint)indexCount},
+        .instanceCount {1},
+        .indexOffset {_totalIndexCount},
+        .vertexOffset {(GLint)_totalVertexCount},
+        .instanceOffset {_totalInstanceCount}
+    };
 
-    _vertices.insert(_vertices.end(), vertices, vertices + vertexCount);
-    _indices.insert(_indices.end(), indices, indices + indexCount);
-}
+    glBindBuffer(GL_DRAW_INDIRECT_BUFFER, _drawCmdBuffer);
+    glBufferSubData(GL_DRAW_INDIRECT_BUFFER, _totalDrawCmdCount * sizeof(_DrawCmd), sizeof(_DrawCmd), &newDrawCall);
+    _totalDrawCmdCount++;
 
-void Renderer::beginScene()
-{
-    if(_vertices.size() > _vboSize)
-    {
-        glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-        glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(Vertex), _vertices.data(), GL_DYNAMIC_DRAW);
-    }
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBufferSubData(GL_ARRAY_BUFFER, _totalVertexCount * sizeof(Vertex), vertexCount * sizeof(Vertex), vertices);
+    _totalVertexCount += vertexCount;
 
-    if(_indices.size() > _eboSize)
-    {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(unsigned int), _indices.data(), GL_DYNAMIC_DRAW);
-    }
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, _totalIndexCount * sizeof(Index), indexCount * sizeof(Index), indices);
+    _totalIndexCount += indexCount;
 
-    sceneOpen = true;
-}
-
-void Renderer::endScene()
-{
-    sceneOpen = false;
-}
+    glBindBuffer(GL_ARRAY_BUFFER, _instanceVertexBuffer);
+    glBufferSubData(GL_ARRAY_BUFFER, _totalInstanceCount * sizeof(ModelData), sizeof(ModelData), &modelData);
+    _totalInstanceCount++;
+};
 
 void Renderer::drawAll()
 {
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUseProgram(_defaultShader);
+    glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (const void*)0, _totalDrawCmdCount, sizeof(_DrawCmd));
     glfwSwapBuffers(_window);
+
+    #if 0
+    // orphan buffers
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, _MAX_INDICES * sizeof(Index), nullptr, GL_STREAM_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, _MAX_VERTICES * sizeof(Vertex), nullptr, GL_STREAM_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, _instanceVertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, _MAX_INSTANCES * sizeof(ModelData), nullptr, GL_STREAM_DRAW);
+
+    glBindBuffer(GL_DRAW_INDIRECT_BUFFER, _drawCmdBuffer);
+    glBufferData(GL_DRAW_INDIRECT_BUFFER, _MAX_DRAW_CALLS * sizeof(_DrawCmd), nullptr, GL_STREAM_DRAW);
+    #endif
+
+    _totalVertexCount = 0;
+    _totalIndexCount = 0;
+    _totalInstanceCount = 0;
+    _totalDrawCmdCount = 0;
 }
