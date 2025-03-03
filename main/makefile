@@ -4,7 +4,7 @@
 
 srcDirs=src
 incDirs=..\deps\include ..\renderer\include
-libDirs=..\deps\lib ..\renderer\lib "P:\Libraries\Windows^Kits\10\Lib\10.0.26100.0\um\x64"
+libDirs=..\deps\lib ..\renderer\lib "E:\Programming\Libraries\Windows^Kits\10\Lib\10.0.26100.0\um\x64"
 intermDir=interms
 
 libFilesDebug=rendererd.lib GLFW\libglfw3.a Gdi32.lib

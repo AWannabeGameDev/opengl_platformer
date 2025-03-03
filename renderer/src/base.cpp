@@ -1,7 +1,8 @@
-#include "renderer/base.hpp"
 #include <stdio.h> 
 #include <fstream>
 #include <sstream>
+
+#include "renderer/base.hpp"
 
 GLFWwindow* createWindow(int windowWidth, int windowHeight, std::string_view title)
 {
