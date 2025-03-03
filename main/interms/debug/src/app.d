@@ -1,5 +1,6 @@
 interms\debug/src/app.o: src/app.cpp \
- ..\renderer\include/renderer/renderer.hpp ..\deps\include/glm/glm.hpp \
+ ..\renderer\include/renderer/renderer.hpp \
+ ..\renderer\include/glm/glm_custom.hpp ..\deps\include/glm/glm.hpp \
  ..\deps\include/glm/detail/_fixes.hpp \
  G:/mingw64/include/c++/14.2.0/cmath \
  G:/mingw64/include/c++/14.2.0/bits/requires_hosted.h \
@@ -271,21 +272,73 @@ interms\debug/src/app.o: src/app.cpp \
  G:/mingw64/include/c++/14.2.0/bits/uses_allocator_args.h \
  G:/mingw64/include/c++/14.2.0/tuple \
  G:/mingw64/include/c++/14.2.0/bits/ranges_util.h \
- ..\renderer\include/renderer/base.hpp ..\deps\include/glad/glad.h \
+ ..\renderer\include/renderer/base.hpp ..\renderer\include/glad/glad.h \
  ..\deps\include/KHR/khrplatform.h ..\deps\include/GLFW/glfw3.h \
- ..\deps\include/glm/gtc/matrix_transform.hpp \
- ..\deps\include/glm/gtc/../ext/matrix_projection.hpp \
- ..\deps\include/glm/gtc/../ext/../gtc/constants.hpp \
- ..\deps\include/glm/gtc/../ext/../gtc/../ext/scalar_constants.hpp \
- ..\deps\include/glm/gtc/../ext/../gtc/../ext/../detail/setup.hpp \
- ..\deps\include/glm/gtc/../ext/../gtc/../ext/scalar_constants.inl \
- ..\deps\include/glm/gtc/../ext/../gtc/constants.inl \
- ..\deps\include/glm/gtc/../ext/matrix_projection.inl \
- ..\deps\include/glm/gtc/../ext/matrix_clip_space.hpp \
- ..\deps\include/glm/gtc/../ext/matrix_clip_space.inl \
- ..\deps\include/glm/gtc/../ext/matrix_transform.hpp \
- ..\deps\include/glm/gtc/../ext/matrix_transform.inl \
- ..\deps\include/glm/gtc/matrix_transform.inl \
+ ..\renderer\include/renderer/uniforms.hpp \
+ ..\deps\include/glm/gtc/type_ptr.hpp \
+ ..\deps\include/glm/gtc/../gtc/quaternion.hpp \
+ ..\deps\include/glm/gtc/../gtc/../gtc/constants.hpp \
+ ..\deps\include/glm/gtc/../gtc/../gtc/../ext/scalar_constants.hpp \
+ ..\deps\include/glm/gtc/../gtc/../gtc/../ext/../detail/setup.hpp \
+ ..\deps\include/glm/gtc/../gtc/../gtc/../ext/scalar_constants.inl \
+ ..\deps\include/glm/gtc/../gtc/../gtc/constants.inl \
+ ..\deps\include/glm/gtc/../gtc/../gtc/matrix_transform.hpp \
+ ..\deps\include/glm/gtc/../gtc/../gtc/../ext/matrix_projection.hpp \
+ ..\deps\include/glm/gtc/../gtc/../gtc/../ext/matrix_projection.inl \
+ ..\deps\include/glm/gtc/../gtc/../gtc/../ext/matrix_clip_space.hpp \
+ ..\deps\include/glm/gtc/../gtc/../gtc/../ext/matrix_clip_space.inl \
+ ..\deps\include/glm/gtc/../gtc/../gtc/../ext/matrix_transform.hpp \
+ ..\deps\include/glm/gtc/../gtc/../gtc/../ext/matrix_transform.inl \
+ ..\deps\include/glm/gtc/../gtc/../gtc/matrix_transform.inl \
+ ..\deps\include/glm/gtc/../gtc/../ext/vector_relational.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/vector_relational.inl \
+ ..\deps\include/glm/gtc/../gtc/../ext/../detail/type_float.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/../detail/setup.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/quaternion_common.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/../ext/quaternion_geometric.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/../ext/quaternion_geometric.inl \
+ ..\deps\include/glm/gtc/../gtc/../ext/quaternion_common.inl \
+ ..\deps\include/glm/gtc/../gtc/../ext/quaternion_float.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/../detail/type_quat.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/../detail/../ext/quaternion_relational.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/../detail/../ext/quaternion_relational.inl \
+ ..\deps\include/glm/gtc/../gtc/../ext/../detail/type_quat.inl \
+ ..\deps\include/glm/gtc/../gtc/../ext/quaternion_float_precision.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/quaternion_double.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/quaternion_double_precision.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/quaternion_trigonometric.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/quaternion_trigonometric.inl \
+ ..\deps\include/glm/gtc/../gtc/../ext/quaternion_transform.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/quaternion_transform.inl \
+ ..\deps\include/glm/gtc/../gtc/quaternion.inl \
+ ..\deps\include/glm/gtc/../gtc/epsilon.hpp \
+ ..\deps\include/glm/gtc/../gtc/../detail/setup.hpp \
+ ..\deps\include/glm/gtc/../gtc/epsilon.inl \
+ ..\deps\include/glm/gtc/../gtc/vec1.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/vector_bool1.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/vector_bool1_precision.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/vector_float1.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/vector_float1_precision.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/vector_double1.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/vector_double1_precision.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/vector_int1.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/vector_int1_sized.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/vector_uint1.hpp \
+ ..\deps\include/glm/gtc/../gtc/../ext/vector_uint1_sized.hpp \
+ G:/mingw64/include/c++/14.2.0/cstring \
+ G:/mingw64/x86_64-w64-mingw32/include/string.h \
+ G:/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h \
+ ..\deps\include/glm/gtc/type_ptr.inl \
+ G:/mingw64/include/c++/14.2.0/unordered_map \
+ G:/mingw64/include/c++/14.2.0/bits/unordered_map.h \
+ G:/mingw64/include/c++/14.2.0/bits/hashtable.h \
+ G:/mingw64/include/c++/14.2.0/bits/hashtable_policy.h \
+ G:/mingw64/include/c++/14.2.0/ext/aligned_buffer.h \
+ G:/mingw64/include/c++/14.2.0/bits/enable_special_members.h \
+ G:/mingw64/include/c++/14.2.0/bits/node_handle.h \
+ G:/mingw64/include/c++/14.2.0/bits/erase_if.h \
+ G:/mingw64/include/c++/14.2.0/utility \
+ G:/mingw64/include/c++/14.2.0/bits/stl_relops.h \
  G:/mingw64/x86_64-w64-mingw32/include/windows.h \
  G:/mingw64/x86_64-w64-mingw32/include/sdkddkver.h \
  G:/mingw64/x86_64-w64-mingw32/include/excpt.h \
@@ -305,8 +358,6 @@ interms\debug/src/app.o: src/app.cpp \
  G:/mingw64/x86_64-w64-mingw32/include/psdk_inc/intrin-impl.h \
  G:/mingw64/x86_64-w64-mingw32/include/basetsd.h \
  G:/mingw64/x86_64-w64-mingw32/include/guiddef.h \
- G:/mingw64/x86_64-w64-mingw32/include/string.h \
- G:/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h \
  G:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/x86intrin.h \
  G:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/x86gprintrin.h \
  G:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/ia32intrin.h \
@@ -540,6 +591,7 @@ interms\debug/src/app.o: src/app.cpp \
  G:/mingw64/x86_64-w64-mingw32/include/imm.h \
  G:/mingw64/include/c++/14.2.0/array
 ..\renderer\include/renderer/renderer.hpp:
+..\renderer\include/glm/glm_custom.hpp:
 ..\deps\include/glm/glm.hpp:
 ..\deps\include/glm/detail/_fixes.hpp:
 G:/mingw64/include/c++/14.2.0/cmath:
@@ -819,22 +871,74 @@ G:/mingw64/include/c++/14.2.0/bits/uses_allocator_args.h:
 G:/mingw64/include/c++/14.2.0/tuple:
 G:/mingw64/include/c++/14.2.0/bits/ranges_util.h:
 ..\renderer\include/renderer/base.hpp:
-..\deps\include/glad/glad.h:
+..\renderer\include/glad/glad.h:
 ..\deps\include/KHR/khrplatform.h:
 ..\deps\include/GLFW/glfw3.h:
-..\deps\include/glm/gtc/matrix_transform.hpp:
-..\deps\include/glm/gtc/../ext/matrix_projection.hpp:
-..\deps\include/glm/gtc/../ext/../gtc/constants.hpp:
-..\deps\include/glm/gtc/../ext/../gtc/../ext/scalar_constants.hpp:
-..\deps\include/glm/gtc/../ext/../gtc/../ext/../detail/setup.hpp:
-..\deps\include/glm/gtc/../ext/../gtc/../ext/scalar_constants.inl:
-..\deps\include/glm/gtc/../ext/../gtc/constants.inl:
-..\deps\include/glm/gtc/../ext/matrix_projection.inl:
-..\deps\include/glm/gtc/../ext/matrix_clip_space.hpp:
-..\deps\include/glm/gtc/../ext/matrix_clip_space.inl:
-..\deps\include/glm/gtc/../ext/matrix_transform.hpp:
-..\deps\include/glm/gtc/../ext/matrix_transform.inl:
-..\deps\include/glm/gtc/matrix_transform.inl:
+..\renderer\include/renderer/uniforms.hpp:
+..\deps\include/glm/gtc/type_ptr.hpp:
+..\deps\include/glm/gtc/../gtc/quaternion.hpp:
+..\deps\include/glm/gtc/../gtc/../gtc/constants.hpp:
+..\deps\include/glm/gtc/../gtc/../gtc/../ext/scalar_constants.hpp:
+..\deps\include/glm/gtc/../gtc/../gtc/../ext/../detail/setup.hpp:
+..\deps\include/glm/gtc/../gtc/../gtc/../ext/scalar_constants.inl:
+..\deps\include/glm/gtc/../gtc/../gtc/constants.inl:
+..\deps\include/glm/gtc/../gtc/../gtc/matrix_transform.hpp:
+..\deps\include/glm/gtc/../gtc/../gtc/../ext/matrix_projection.hpp:
+..\deps\include/glm/gtc/../gtc/../gtc/../ext/matrix_projection.inl:
+..\deps\include/glm/gtc/../gtc/../gtc/../ext/matrix_clip_space.hpp:
+..\deps\include/glm/gtc/../gtc/../gtc/../ext/matrix_clip_space.inl:
+..\deps\include/glm/gtc/../gtc/../gtc/../ext/matrix_transform.hpp:
+..\deps\include/glm/gtc/../gtc/../gtc/../ext/matrix_transform.inl:
+..\deps\include/glm/gtc/../gtc/../gtc/matrix_transform.inl:
+..\deps\include/glm/gtc/../gtc/../ext/vector_relational.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/vector_relational.inl:
+..\deps\include/glm/gtc/../gtc/../ext/../detail/type_float.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/../detail/setup.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/quaternion_common.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/../ext/quaternion_geometric.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/../ext/quaternion_geometric.inl:
+..\deps\include/glm/gtc/../gtc/../ext/quaternion_common.inl:
+..\deps\include/glm/gtc/../gtc/../ext/quaternion_float.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/../detail/type_quat.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/../detail/../ext/quaternion_relational.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/../detail/../ext/quaternion_relational.inl:
+..\deps\include/glm/gtc/../gtc/../ext/../detail/type_quat.inl:
+..\deps\include/glm/gtc/../gtc/../ext/quaternion_float_precision.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/quaternion_double.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/quaternion_double_precision.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/quaternion_trigonometric.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/quaternion_trigonometric.inl:
+..\deps\include/glm/gtc/../gtc/../ext/quaternion_transform.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/quaternion_transform.inl:
+..\deps\include/glm/gtc/../gtc/quaternion.inl:
+..\deps\include/glm/gtc/../gtc/epsilon.hpp:
+..\deps\include/glm/gtc/../gtc/../detail/setup.hpp:
+..\deps\include/glm/gtc/../gtc/epsilon.inl:
+..\deps\include/glm/gtc/../gtc/vec1.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/vector_bool1.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/vector_bool1_precision.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/vector_float1.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/vector_float1_precision.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/vector_double1.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/vector_double1_precision.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/vector_int1.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/vector_int1_sized.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/vector_uint1.hpp:
+..\deps\include/glm/gtc/../gtc/../ext/vector_uint1_sized.hpp:
+G:/mingw64/include/c++/14.2.0/cstring:
+G:/mingw64/x86_64-w64-mingw32/include/string.h:
+G:/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h:
+..\deps\include/glm/gtc/type_ptr.inl:
+G:/mingw64/include/c++/14.2.0/unordered_map:
+G:/mingw64/include/c++/14.2.0/bits/unordered_map.h:
+G:/mingw64/include/c++/14.2.0/bits/hashtable.h:
+G:/mingw64/include/c++/14.2.0/bits/hashtable_policy.h:
+G:/mingw64/include/c++/14.2.0/ext/aligned_buffer.h:
+G:/mingw64/include/c++/14.2.0/bits/enable_special_members.h:
+G:/mingw64/include/c++/14.2.0/bits/node_handle.h:
+G:/mingw64/include/c++/14.2.0/bits/erase_if.h:
+G:/mingw64/include/c++/14.2.0/utility:
+G:/mingw64/include/c++/14.2.0/bits/stl_relops.h:
 G:/mingw64/x86_64-w64-mingw32/include/windows.h:
 G:/mingw64/x86_64-w64-mingw32/include/sdkddkver.h:
 G:/mingw64/x86_64-w64-mingw32/include/excpt.h:
@@ -854,8 +958,6 @@ G:/mingw64/x86_64-w64-mingw32/include/apiset.h:
 G:/mingw64/x86_64-w64-mingw32/include/psdk_inc/intrin-impl.h:
 G:/mingw64/x86_64-w64-mingw32/include/basetsd.h:
 G:/mingw64/x86_64-w64-mingw32/include/guiddef.h:
-G:/mingw64/x86_64-w64-mingw32/include/string.h:
-G:/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h:
 G:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/x86intrin.h:
 G:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/x86gprintrin.h:
 G:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/ia32intrin.h:

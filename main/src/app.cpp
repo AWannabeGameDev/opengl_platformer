@@ -22,9 +22,12 @@ int main()
 
     Renderer::ModelData triModelData
     {
-        .transform {glm::translate(glm::mat4{1.0f}, glm::vec3{1.0f, 0.0f, 0.0f})},
+        .transform {glm::translate(glm::mat4 {1.0f}, glm::vec3 {0.0f})},
         .color {0.0f, 1.0f, 1.0f, 1.0f}
     };
+
+    glm::mat4 view {glm::translate(glm::mat4 (1.0f), glm::vec3 {-0.2f})};
+    glm::mat4 projection {glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 1.0f)};
 
     while(not render.userExitedWindow())
     {
@@ -32,7 +35,7 @@ int main()
 
         render.submitModel(triVerts.data(), triVerts.size(), triInds.data(), triInds.size(), triModelData);
 
-        render.drawAll();
+        render.drawAll(view, projection);
     }
 
     return 0;

@@ -4,22 +4,24 @@ Renderer::Renderer(int width, int height, std::string_view title) :
     _window {createWindow(width, height, title)}, _width {width}, _height {height}
 {
     glEnable(GL_DEBUG_OUTPUT);
+    glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
     glViewport(0, 0, width, height);
+    glEnable(GL_DEPTH_TEST);
 
     glGenVertexArrays(1, &_vertexArray);
     glBindVertexArray(_vertexArray);
 
     glGenBuffers(1, &_indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, _MAX_INDICES * sizeof(Index), nullptr, GL_STREAM_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, _MAX_INDICES * sizeof(Index), nullptr, GL_DYNAMIC_DRAW);
 
     glGenBuffers(1, &_vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, _MAX_VERTICES * sizeof(Vertex), nullptr, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, _MAX_VERTICES * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
 
     glGenBuffers(1, &_instanceVertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, _instanceVertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, _MAX_INSTANCES * sizeof(ModelData), nullptr, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, _MAX_INSTANCES * sizeof(ModelData), nullptr, GL_DYNAMIC_DRAW);
 
     glBindVertexBuffer(_BINDING_POINT_VERTICES, _vertexBuffer, 0, sizeof(Vertex));
     glBindVertexBuffer(_BINDING_POINT_INSTANCE, _instanceVertexBuffer, 0, sizeof(ModelData));
@@ -44,6 +46,9 @@ Renderer::Renderer(int width, int height, std::string_view title) :
     glGenBuffers(1, &_drawCmdBuffer);
     glBindBuffer(GL_DRAW_INDIRECT_BUFFER, _drawCmdBuffer);
     glBufferData(GL_DRAW_INDIRECT_BUFFER, _MAX_DRAW_CALLS * sizeof(_DrawCmd), nullptr, GL_STREAM_DRAW);
+
+    _uniforms.addUniform(_defaultShader, "view");
+    _uniforms.addUniform(_defaultShader, "projection");
 }
 
 Renderer::~Renderer()
@@ -91,12 +96,17 @@ void Renderer::submitModel(const Vertex* vertices, size_t vertexCount, const Ind
     _totalInstanceCount++;
 };
 
-void Renderer::drawAll()
+void Renderer::drawAll(const glm::mat4& view, const glm::mat4& projection)
 {
+    glUseProgram(_defaultShader);
+    _uniforms.setUniform(_defaultShader, "view", view);
+    _uniforms.setUniform(_defaultShader, "projection", projection);
+
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glUseProgram(_defaultShader);
+
     glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, (const void*)0, _totalDrawCmdCount, sizeof(_DrawCmd));
+
     glfwSwapBuffers(_window);
 
     #if 0

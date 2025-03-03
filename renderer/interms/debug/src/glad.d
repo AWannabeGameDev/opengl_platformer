@@ -29,7 +29,7 @@ interms\debug/src/glad.o: src/glad.cpp \
  G:/mingw64/include/c++/14.2.0/bits/std_abs.h \
  G:/mingw64/x86_64-w64-mingw32/include/string.h \
  G:/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h \
- ..\deps\include/glad/glad.h ..\deps\include/KHR/khrplatform.h \
+ include/glad/glad.h ..\deps\include/KHR/khrplatform.h \
  G:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
  G:/mingw64/x86_64-w64-mingw32/include/stdint.h \
  G:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stddef.h \
@@ -315,7 +315,7 @@ G:/mingw64/x86_64-w64-mingw32/include/errno.h:
 G:/mingw64/include/c++/14.2.0/bits/std_abs.h:
 G:/mingw64/x86_64-w64-mingw32/include/string.h:
 G:/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h:
-..\deps\include/glad/glad.h:
+include/glad/glad.h:
 ..\deps\include/KHR/khrplatform.h:
 G:/mingw64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h:
 G:/mingw64/x86_64-w64-mingw32/include/stdint.h:

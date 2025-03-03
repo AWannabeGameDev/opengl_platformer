@@ -1,7 +1,8 @@
 #ifndef UNIFORMS_HPP
 #define UNIFORMS_HPP
 
-#include <glm/glm.hpp>
+#include <glad/glad.h>
+#include <glm/glm_custom.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include <string>
@@ -9,8 +10,6 @@
 #include <unordered_map>
 #include <utility>
 #include <stdexcept>
-
-#include "glad/glad.h"
 
 class Uniforms
 {

@@ -1,11 +1,12 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
-#include <glm/glm.hpp>
+#include <glm/glm_custom.hpp>
 
 #include <stdexcept>
 
 #include "renderer/base.hpp"
+#include "renderer/uniforms.hpp"
 
 class Renderer
 {
@@ -64,6 +65,8 @@ private :
     GLuint _defaultShader {createShaderProgram({"../../renderer/src/shaders/default.vxs",
                                                "../../renderer/src/shaders/default.fms"})};
 
+    Uniforms _uniforms;
+
 public :
     Renderer(int width, int height, std::string_view title);
     ~Renderer();
@@ -73,7 +76,7 @@ public :
     void submitModel(const Vertex* vertices, size_t vertexCount, const Index* indices, size_t indexCount, 
                      const ModelData& modelData);
 
-    void drawAll();
+    void drawAll(const glm::mat4& view, const glm::mat4& projection);
 };
 
 #endif

@@ -1,12 +1,11 @@
 #ifndef BASE_HPP
 #define BASE_HPP
 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <string_view>
 #include <initializer_list>
-
-#include "glad/glad.h"
 
 GLFWwindow* createWindow(int windowWidth, int windowHeight, std::string_view title);
 
